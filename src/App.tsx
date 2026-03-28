@@ -1,34 +1,69 @@
 import React, { useState } from 'react';
-import { GraduationCap, BookOpen, Lightbulb, Briefcase, Menu, X, Moon, Sun } from 'lucide-react';
+import { GraduationCap, BookOpen, Lightbulb, Briefcase, Menu, X, Moon, Sun, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import StudyBuddy from './components/StudyBuddy';
 import IdeaGenerator from './components/IdeaGenerator';
 import PlacementCoach from './components/PlacementCoach';
+import JobAnalyzer from './components/JobAnalyzer';
 import { cn } from './lib/utils';
 
-type Tab = 'home' | 'study' | 'ideas' | 'placement';
+type Tab = 'home' | 'study' | 'ideas' | 'placement' | 'jobs';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
+  const [isResumeUploaded, setIsResumeUploaded] = useState(false);
+  const [resumeAnalysis, setResumeAnalysis] = useState<any>(null);
 
   const toggleTheme = () => {
     setIsDark(!isDark);
     document.documentElement.classList.toggle('dark');
   };
 
-  // Initialize dark mode
+  // Initialize dark mode and handle custom tab change events
   React.useEffect(() => {
     document.documentElement.classList.add('dark');
+    
+    const handleTabChange = (e: any) => {
+      if (e.detail) setActiveTab(e.detail as Tab);
+    };
+    
+    window.addEventListener('changeTab', handleTabChange);
+    return () => window.removeEventListener('changeTab', handleTabChange);
   }, []);
 
   const navItems = [
     { id: 'home', label: 'Home', icon: GraduationCap },
-    { id: 'study', label: 'Study Buddy', icon: BookOpen },
-    { id: 'ideas', label: 'Innovation', icon: Lightbulb },
+    { id: 'study', label: 'Study Buddy', icon: BookOpen, protected: true },
+    { id: 'ideas', label: 'Innovation', icon: Lightbulb, protected: true },
     { id: 'placement', label: 'Placement', icon: Briefcase },
+    { id: 'jobs', label: 'Analyze Jobs', icon: Search, protected: true },
   ];
+
+  const renderLockedState = (title: string) => (
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="max-w-md mx-auto text-center py-20 px-6 bg-card border rounded-3xl shadow-sm space-y-6"
+    >
+      <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+        <Briefcase className="w-10 h-10 text-primary" />
+      </div>
+      <div className="space-y-2">
+        <h2 className="text-2xl font-bold">{title} Locked</h2>
+        <p className="text-muted-foreground">
+          To unlock this feature and get personalized AI assistance, please upload your resume in the Placement Coach section first.
+        </p>
+      </div>
+      <button
+        onClick={() => setActiveTab('placement')}
+        className="bg-primary text-primary-foreground px-8 py-3 rounded-full font-medium hover:opacity-90 transition-all shadow-md"
+      >
+        Go to Placement Coach
+      </button>
+    </motion.div>
+  );
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
@@ -53,7 +88,7 @@ export default function App() {
                   key={item.id}
                   onClick={() => setActiveTab(item.id as Tab)}
                   className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2",
+                    "px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 relative",
                     activeTab === item.id 
                       ? "bg-primary text-primary-foreground shadow-sm" 
                       : "hover:bg-muted text-muted-foreground hover:text-foreground"
@@ -61,6 +96,9 @@ export default function App() {
                 >
                   <item.icon className="w-4 h-4" />
                   {item.label}
+                  {item.protected && !isResumeUploaded && (
+                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-amber-500 rounded-full border-2 border-background" />
+                  )}
                 </button>
               ))}
               <div className="ml-4 pl-4 border-l">
@@ -109,14 +147,21 @@ export default function App() {
                       setIsMenuOpen(false);
                     }}
                     className={cn(
-                      "w-full px-4 py-3 rounded-xl text-left text-sm font-medium flex items-center gap-3 transition-all",
+                      "w-full px-4 py-3 rounded-xl text-left text-sm font-medium flex items-center justify-between transition-all",
                       activeTab === item.id 
                         ? "bg-primary text-primary-foreground" 
                         : "hover:bg-muted text-muted-foreground"
                     )}
                   >
-                    <item.icon className="w-5 h-5" />
-                    {item.label}
+                    <div className="flex items-center gap-3">
+                      <item.icon className="w-5 h-5" />
+                      {item.label}
+                    </div>
+                    {item.protected && !isResumeUploaded && (
+                      <span className="text-[10px] bg-amber-500/20 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">
+                        Locked
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
@@ -167,6 +212,13 @@ export default function App() {
                     desc: 'Analyze your resume against top companies and bridge skill gaps.',
                     icon: Briefcase,
                     color: 'bg-emerald-500/10 text-emerald-500',
+                  },
+                  {
+                    id: 'jobs',
+                    title: 'Analyze Jobs',
+                    desc: 'Find the best career paths based on your current skills.',
+                    icon: Search,
+                    color: 'bg-purple-500/10 text-purple-500',
                   },
                 ].map((feature) => (
                   <button
@@ -223,7 +275,7 @@ export default function App() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
             >
-              <StudyBuddy />
+              {isResumeUploaded ? <StudyBuddy resumeAnalysis={resumeAnalysis} /> : renderLockedState('Study Buddy')}
             </motion.div>
           )}
 
@@ -234,7 +286,7 @@ export default function App() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
             >
-              <IdeaGenerator />
+              {isResumeUploaded ? <IdeaGenerator resumeAnalysis={resumeAnalysis} /> : renderLockedState('Innovation Hub')}
             </motion.div>
           )}
 
@@ -245,7 +297,21 @@ export default function App() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
             >
-              <PlacementCoach />
+              <PlacementCoach onUploadSuccess={(analysis) => {
+                setIsResumeUploaded(true);
+                setResumeAnalysis(analysis);
+              }} />
+            </motion.div>
+          )}
+
+          {activeTab === 'jobs' && (
+            <motion.div
+              key="jobs"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+            >
+              {isResumeUploaded ? <JobAnalyzer resumeAnalysis={resumeAnalysis} /> : renderLockedState('Job Analyzer')}
             </motion.div>
           )}
         </AnimatePresence>

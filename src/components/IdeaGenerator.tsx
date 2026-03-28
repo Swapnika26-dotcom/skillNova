@@ -15,7 +15,11 @@ const DOMAINS = [
   { value: 'uiux', label: 'UI / UX Design' },
 ];
 
-export default function IdeaGenerator() {
+interface IdeaGeneratorProps {
+  resumeAnalysis?: any;
+}
+
+export default function IdeaGenerator({ resumeAnalysis }: IdeaGeneratorProps) {
   const [domain, setDomain] = useState('');
   const [ideas, setIdeas] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +28,7 @@ export default function IdeaGenerator() {
     if (!domain) return;
     setIsLoading(true);
     try {
-      const result = await generateInnovationIdeas(domain);
+      const result = await generateInnovationIdeas(domain, resumeAnalysis);
       setIdeas(result);
     } catch (error) {
       console.error(error);
