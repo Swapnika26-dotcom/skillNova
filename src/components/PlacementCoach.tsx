@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { FileText, Upload, Building2, CheckCircle2, AlertCircle, Loader2, BarChart3, Sparkles, FileUp, X, ChevronRight, TrendingUp, Map } from 'lucide-react';
+import { FileText, Building2, CheckCircle2, AlertCircle, Loader2, BarChart3, Sparkles, FileUp, X, ChevronRight, TrendingUp, Map, Plus } from 'lucide-react';
 import { analyzeResumePDF, generateCareerRoadmap } from '../services/geminiService';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
@@ -14,6 +14,8 @@ export default function PlacementCoach({ onUploadSuccess }: PlacementCoachProps)
   const [isLoading, setIsLoading] = useState(false);
   const [roadmap, setRoadmap] = useState<string | null>(null);
   const [isGeneratingRoadmap, setIsGeneratingRoadmap] = useState(false);
+  const [extraTargetCompanies, setExtraTargetCompanies] = useState<string[]>([]);
+  const [companyInput, setCompanyInput] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,6 +64,22 @@ export default function PlacementCoach({ onUploadSuccess }: PlacementCoachProps)
     } finally {
       setIsGeneratingRoadmap(false);
     }
+  };
+
+  const addTargetCompany = () => {
+    const name = companyInput.trim();
+    if (!name) return;
+    const lower = name.toLowerCase();
+    const suggested = (result?.targetCompanies as string[] | undefined) ?? [];
+    if (
+      suggested.some((c) => c.toLowerCase() === lower) ||
+      extraTargetCompanies.some((c) => c.toLowerCase() === lower)
+    ) {
+      setCompanyInput('');
+      return;
+    }
+    setExtraTargetCompanies((prev) => [...prev, name]);
+    setCompanyInput('');
   };
 
   return (
@@ -194,6 +212,64 @@ export default function PlacementCoach({ onUploadSuccess }: PlacementCoachProps)
                         {skill}
                       </span>
                     ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="px-8 pb-8 border-t bg-muted/20">
+                <div className="pt-8 space-y-4">
+                  <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-wider text-xs">
+                    <Building2 className="w-4 h-4" />
+                    Target companies
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Suggested employers to research and track for applications; add your own dream companies below.
+                  </p>
+                  <div className="flex flex-wrap gap-2.5">
+                    {(result.targetCompanies as string[] | undefined)?.map((company: string, i: number) => (
+                      <span
+                        key={`s-${i}`}
+                        className="px-3 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-lg border border-primary/25"
+                      >
+                        {company}
+                      </span>
+                    ))}
+                    {extraTargetCompanies.map((company, i) => (
+                      <span
+                        key={`e-${i}`}
+                        className="px-3 py-1.5 bg-background text-foreground text-xs font-medium rounded-lg border border-border flex items-center gap-1.5"
+                      >
+                        {company}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setExtraTargetCompanies((prev) => prev.filter((_, j) => j !== i))
+                          }
+                          className="p-0.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
+                          aria-label={`Remove ${company}`}
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2 max-w-xl">
+                    <input
+                      type="text"
+                      value={companyInput}
+                      onChange={(e) => setCompanyInput(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTargetCompany())}
+                      placeholder="e.g. NVIDIA, Stripe, your campus recruiter list…"
+                      className="flex-1 bg-background border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    />
+                    <button
+                      type="button"
+                      onClick={addTargetCompany}
+                      className="shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-background border font-medium text-sm hover:bg-muted/80 transition-colors"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Add company
+                    </button>
                   </div>
                 </div>
               </div>

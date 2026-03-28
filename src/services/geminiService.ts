@@ -204,6 +204,25 @@ function scoreFromPdfPayload(pdfBase64: string): number {
   return 68 + (h % 28);
 }
 
+const TARGET_POOL_A = [
+  "Google", "Microsoft", "Amazon", "Adobe", "Salesforce", "Oracle", "SAP",
+];
+const TARGET_POOL_B = [
+  "TCS", "Infosys", "Wipro", "HCL", "Tech Mahindra", "Cognizant", "Accenture",
+];
+const TARGET_POOL_C = [
+  "Flipkart", "Razorpay", "Zoho", "Freshworks", "Meesho", "Swiggy", "PhonePe",
+];
+
+/** Rotate suggested targets from pools so lists feel varied but deterministic. */
+function targetCompaniesForScore(score: number): string[] {
+  const i = score % 3;
+  const pools = [TARGET_POOL_A, TARGET_POOL_B, TARGET_POOL_C] as const;
+  const primary = pools[i];
+  const secondary = pools[(i + 1) % 3];
+  return [...primary.slice(0, 4), ...secondary.slice(0, 2)];
+}
+
 export async function analyzeResumePDF(pdfBase64: string) {
   await delay(600);
   const score = scoreFromPdfPayload(pdfBase64);
@@ -212,6 +231,7 @@ export async function analyzeResumePDF(pdfBase64: string) {
     matchedSkills: ["JavaScript / TypeScript", "Problem solving", "Communication", "Git / version control"],
     missingSkills: ["System design", "Cloud (AWS/GCP)", "Testing (unit/e2e)", "SQL performance tuning"],
     experienceLevel: score >= 82 ? "Intermediate" : "Entry",
+    targetCompanies: targetCompaniesForScore(score),
     suggestion:
       "Local demo mode: the PDF is not parsed by an AI service. Replace this module with a real analyzer if you add an API. Meanwhile, tighten action verbs, quantify impact, and align skills with target job descriptions.",
   };
