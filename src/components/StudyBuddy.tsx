@@ -72,20 +72,22 @@ export default function StudyBuddy({ resumeAnalysis }: StudyBuddyProps) {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-12rem)] max-w-3xl mx-auto bg-card border rounded-xl overflow-hidden shadow-sm">
-      <div className="p-4 border-b bg-muted/30 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Bot className="w-5 h-5 text-primary" />
+    <div className="flex flex-col h-[calc(100vh-12rem)] max-w-3xl mx-auto bg-card border border-primary/20 rounded-3xl overflow-hidden shadow-sm">
+      <div className="p-6 border-b bg-primary/5 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="p-2.5 bg-primary/10 rounded-full">
+            <BookOpen className="w-6 h-6 text-primary" />
+          </div>
           <div>
-            <h2 className="text-sm font-semibold">AI Study Buddy</h2>
-            <p className="text-[10px] text-muted-foreground">Personalized Academic Tutor</p>
+            <h2 className="text-lg font-bold">AI Study Buddy</h2>
+            <p className="text-xs text-muted-foreground">Personalized Academic Tutor</p>
           </div>
         </div>
         {resumeAnalysis && (
           <button
             onClick={handleGeneratePlan}
             disabled={isGeneratingPlan}
-            className="text-[11px] bg-primary/10 text-primary px-3 py-1.5 rounded-full font-medium flex items-center gap-1.5 hover:bg-primary/20 transition-colors disabled:opacity-50"
+            className="text-[11px] bg-primary text-primary-foreground px-3 py-1.5 rounded-full font-medium flex items-center gap-1.5 hover:opacity-90 transition-colors disabled:opacity-50"
           >
             {isGeneratingPlan ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
             Generate 4-Week Plan
@@ -93,7 +95,7 @@ export default function StudyBuddy({ resumeAnalysis }: StudyBuddyProps) {
         )}
       </div>
 
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-primary/[0.02]">
         {messages.length === 0 && !resumeAnalysis && (
           <div className="text-center py-12 text-muted-foreground">
             <BookOpen className="w-12 h-12 mx-auto mb-4 opacity-20" />

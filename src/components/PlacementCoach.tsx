@@ -66,9 +66,9 @@ export default function PlacementCoach({ onUploadSuccess }: PlacementCoachProps)
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
-      <div className="bg-card border rounded-2xl p-8 shadow-sm">
+      <div className="bg-card border border-primary/20 rounded-3xl p-8 shadow-sm">
         <div className="flex items-center gap-4 mb-8">
-          <div className="p-3 bg-primary/10 rounded-xl">
+          <div className="p-3 bg-primary/10 rounded-full">
             <BarChart3 className="w-8 h-8 text-primary" />
           </div>
           <div>
@@ -80,8 +80,8 @@ export default function PlacementCoach({ onUploadSuccess }: PlacementCoachProps)
         <div className="space-y-6">
           <div 
             onClick={() => fileInputRef.current?.click()}
-            className={`border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all ${
-              file ? "border-primary bg-primary/5" : "border-muted hover:border-primary/50 hover:bg-muted/30"
+            className={`border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all ${
+              file ? "border-primary bg-primary/5" : "border-primary/10 hover:border-primary/30 hover:bg-primary/[0.02]"
             }`}
           >
             <input 
@@ -100,7 +100,7 @@ export default function PlacementCoach({ onUploadSuccess }: PlacementCoachProps)
                   <span className="text-lg font-semibold">{file.name}</span>
                   <button 
                     onClick={(e) => { e.stopPropagation(); setFile(null); }}
-                    className="p-1.5 hover:bg-muted rounded-full transition-colors"
+                    className="p-1.5 hover:bg-primary/10 rounded-full transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -109,17 +109,17 @@ export default function PlacementCoach({ onUploadSuccess }: PlacementCoachProps)
               </div>
             ) : (
               <div className="flex flex-col items-center gap-4">
-                <div className="p-4 bg-muted rounded-full">
-                  <FileUp className="w-10 h-10 text-muted-foreground" />
+                <div className="p-4 bg-primary/5 rounded-full">
+                  <FileUp className="w-10 h-10 text-primary/60" />
                 </div>
                 <div className="space-y-1">
                   <p className="text-lg font-semibold">Upload Your Resume</p>
                   <p className="text-sm text-muted-foreground">Drag and drop your PDF here or click to browse</p>
                 </div>
                 <div className="flex items-center gap-4 text-xs font-medium text-muted-foreground">
-                  <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3" /> PDF Support</span>
-                  <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3" /> ATS Scanning</span>
-                  <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3" /> Skill Gap Analysis</span>
+                  <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-primary" /> PDF Support</span>
+                  <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-primary" /> ATS Scanning</span>
+                  <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-primary" /> Skill Gap Analysis</span>
                 </div>
               </div>
             )}
@@ -170,13 +170,13 @@ export default function PlacementCoach({ onUploadSuccess }: PlacementCoachProps)
 
               <div className="p-8 grid md:grid-cols-2 gap-12">
                 <div className="space-y-6">
-                  <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs">
+                  <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-wider text-xs">
                     <CheckCircle2 className="w-4 h-4" />
                     Core Strengths
                   </div>
                   <div className="flex flex-wrap gap-2.5">
                     {result.matchedSkills.map((skill: string, i: number) => (
-                      <span key={i} className="px-3 py-1.5 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-medium rounded-lg border border-emerald-500/20">
+                      <span key={i} className="px-3 py-1.5 bg-primary/10 text-primary text-xs font-medium rounded-lg border border-primary/20">
                         {skill}
                       </span>
                     ))}
@@ -184,13 +184,13 @@ export default function PlacementCoach({ onUploadSuccess }: PlacementCoachProps)
                 </div>
 
                 <div className="space-y-6">
-                  <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider text-xs">
+                  <div className="flex items-center gap-2 text-primary/80 font-bold uppercase tracking-wider text-xs">
                     <AlertCircle className="w-4 h-4" />
                     Growth Opportunities
                   </div>
                   <div className="flex flex-wrap gap-2.5">
                     {result.missingSkills.map((skill: string, i: number) => (
-                      <span key={i} className="px-3 py-1.5 bg-amber-500/10 text-amber-700 dark:text-amber-300 text-xs font-medium rounded-lg border border-amber-500/20">
+                      <span key={i} className="px-3 py-1.5 bg-primary/5 text-primary/70 text-xs font-medium rounded-lg border border-primary/10">
                         {skill}
                       </span>
                     ))}

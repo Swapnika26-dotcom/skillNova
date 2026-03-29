@@ -62,14 +62,14 @@ export default function JobAnalyzer({ resumeAnalysis }: JobAnalyzerProps) {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      <div className="bg-card border rounded-xl p-6 shadow-sm">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-primary/10 rounded-lg">
-            <Search className="w-6 h-6 text-primary" />
+      <div className="bg-card border border-primary/20 rounded-3xl p-8 shadow-sm">
+        <div className="flex items-center gap-4 mb-8">
+          <div className="p-3 bg-primary/10 rounded-full">
+            <Search className="w-8 h-8 text-primary" />
           </div>
           <div>
-            <h2 className="text-xl font-semibold">Analyze Jobs</h2>
-            <p className="text-sm text-muted-foreground">Find the best career paths based on your skills</p>
+            <h2 className="text-2xl font-bold">Analyze Jobs</h2>
+            <p className="text-muted-foreground">Find the best career paths based on your skills</p>
           </div>
         </div>
 
@@ -79,7 +79,7 @@ export default function JobAnalyzer({ resumeAnalysis }: JobAnalyzerProps) {
               <label className="block text-sm font-medium">Your Skills</label>
               {resumeAnalysis?.matchedSkills && (
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full uppercase tracking-wider font-bold border border-emerald-500/20">
+                  <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full uppercase tracking-wider font-bold border border-primary/20">
                     Extracted from Resume
                   </span>
                   <button 
@@ -96,14 +96,14 @@ export default function JobAnalyzer({ resumeAnalysis }: JobAnalyzerProps) {
               value={skills}
               onChange={(e) => setSkills(e.target.value)}
               placeholder="e.g. React, Node.js, Python, AWS, UI Design..."
-              className="w-full bg-muted/50 border rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-full bg-primary/5 border border-primary/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
           <button
             onClick={handleGenerate}
             disabled={!skills.trim() || isLoading}
-            className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-medium flex items-center justify-center gap-2 hover:opacity-90 disabled:opacity-50 transition-all shadow-sm"
+            className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-90 disabled:opacity-50 transition-all shadow-sm"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Briefcase className="w-5 h-5" />}
             Generate Job Recommendations

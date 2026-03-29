@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GraduationCap, BookOpen, Lightbulb, Briefcase, Menu, X, Moon, Sun, Search } from 'lucide-react';
+import { GraduationCap, BookOpen, Lightbulb, Briefcase, Menu, X, Moon, Sun, Search, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import StudyBuddy from './components/StudyBuddy';
 import IdeaGenerator from './components/IdeaGenerator';
@@ -45,20 +45,21 @@ export default function App() {
     <motion.div 
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="max-w-md mx-auto text-center py-20 px-6 bg-card border rounded-3xl shadow-sm space-y-6"
+      className="max-w-md mx-auto text-center py-20 px-8 bg-card border-2 border-primary/10 rounded-[3rem] shadow-2xl space-y-8 relative overflow-hidden"
     >
-      <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-        <Briefcase className="w-10 h-10 text-primary" />
+      <div className="absolute top-0 right-0 -mr-10 -mt-10 w-32 h-32 bg-primary/5 rounded-full blur-2xl" />
+      <div className="w-24 h-24 bg-primary/10 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] flex items-center justify-center mx-auto relative z-10">
+        <Briefcase className="w-12 h-12 text-primary" />
       </div>
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold">{title} Locked</h2>
-        <p className="text-muted-foreground">
+      <div className="space-y-4 relative z-10">
+        <h2 className="text-3xl font-bold tracking-tight">{title} Locked</h2>
+        <p className="text-muted-foreground text-lg leading-relaxed">
           To unlock this feature and get personalized AI assistance, please upload your resume in the Placement Coach section first.
         </p>
       </div>
       <button
         onClick={() => setActiveTab('placement')}
-        className="bg-primary text-primary-foreground px-8 py-3 rounded-full font-medium hover:opacity-90 transition-all shadow-md"
+        className="bg-primary text-primary-foreground px-10 py-4 rounded-full font-bold text-lg hover:opacity-90 transition-all shadow-xl shadow-primary/20 relative z-10"
       >
         Go to Placement Coach
       </button>
@@ -82,7 +83,7 @@ export default function App() {
             </div>
 
             {/* Desktop Nav */}
-            <div className="hidden md:flex items-center gap-1">
+            <div className="hidden md:flex items-center gap-0">
               {navItems.map((item) => (
                 <button
                   key={item.id}
@@ -90,14 +91,14 @@ export default function App() {
                   className={cn(
                     "px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 relative",
                     activeTab === item.id 
-                      ? "bg-primary text-primary-foreground shadow-sm" 
-                      : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                      ? "bg-primary text-primary-foreground shadow-sm scale-110 z-10" 
+                      : "hover:bg-muted text-muted-foreground hover:text-foreground scale-95"
                   )}
                 >
                   <item.icon className="w-4 h-4" />
                   {item.label}
                   {item.protected && !isResumeUploaded && (
-                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-amber-500 rounded-full border-2 border-background" />
+                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full border-2 border-background" />
                   )}
                 </button>
               ))}
@@ -149,8 +150,8 @@ export default function App() {
                     className={cn(
                       "w-full px-4 py-3 rounded-xl text-left text-sm font-medium flex items-center justify-between transition-all",
                       activeTab === item.id 
-                        ? "bg-primary text-primary-foreground" 
-                        : "hover:bg-muted text-muted-foreground"
+                        ? "bg-primary text-primary-foreground scale-[1.05] z-10" 
+                        : "hover:bg-muted text-muted-foreground scale-100"
                     )}
                   >
                     <div className="flex items-center gap-3">
@@ -181,87 +182,104 @@ export default function App() {
               exit={{ opacity: 0, y: -20 }}
               className="space-y-12"
             >
-              <div className="text-center space-y-4 max-w-3xl mx-auto">
-                <h1 className="text-4xl md:text-6xl font-display font-bold tracking-tight">
-                  Empowering <span className="text-primary">BTech Students</span> with AI
-                </h1>
-                <p className="text-lg text-muted-foreground">
-                  A unified ecosystem designed to accelerate your learning, spark innovation, and boost your career prospects.
-                </p>
+              <div className="relative max-w-4xl mx-auto mb-24">
+                <div className="absolute inset-0 bg-primary/5 -rotate-2 rounded-[2rem] translate-x-2 translate-y-2" />
+                <div className="relative bg-card border-2 border-primary/10 rounded-[2rem] p-10 md:p-24 shadow-2xl overflow-hidden">
+                  <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-primary/5 rounded-full blur-3xl" />
+                  <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-48 h-48 bg-primary/5 rounded-full blur-3xl" />
+                  
+                  <div className="relative z-10 text-center space-y-6">
+                    <h1 className="text-4xl md:text-7xl font-display font-bold tracking-tight leading-tight">
+                      Empowering <span className="text-primary">BTech Students</span> with AI
+                    </h1>
+                    <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+                      A unified ecosystem designed to accelerate your learning, spark innovation, and boost your career prospects.
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-12">
                 {[
                   {
                     id: 'study',
                     title: 'AI Study Buddy',
                     desc: 'Get instant academic help and subject-specific tutoring 24/7.',
                     icon: BookOpen,
-                    color: 'bg-blue-500/10 text-blue-500',
+                    color: 'bg-primary/10 text-primary',
                   },
                   {
                     id: 'ideas',
                     title: 'Innovation Hub',
                     desc: 'Generate cutting-edge project ideas across 12+ technical domains.',
                     icon: Lightbulb,
-                    color: 'bg-amber-500/10 text-amber-500',
+                    color: 'bg-primary/20 text-primary',
                   },
                   {
                     id: 'placement',
                     title: 'Placement Coach',
                     desc: 'Analyze your resume against top companies and bridge skill gaps.',
                     icon: Briefcase,
-                    color: 'bg-emerald-500/10 text-emerald-500',
+                    color: 'bg-primary/15 text-primary',
                   },
                   {
                     id: 'jobs',
                     title: 'Analyze Jobs',
                     desc: 'Find the best career paths based on your current skills.',
                     icon: Search,
-                    color: 'bg-purple-500/10 text-purple-500',
+                    color: 'bg-primary/25 text-primary',
                   },
                 ].map((feature) => (
                   <button
                     key={feature.id}
                     onClick={() => setActiveTab(feature.id as Tab)}
-                    className="group p-8 bg-card border rounded-2xl text-left hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 transition-all"
+                    className="group p-8 bg-card border-2 border-transparent hover:border-primary/20 rounded-[2.5rem] text-left hover:shadow-2xl hover:shadow-primary/5 transition-all relative overflow-hidden"
                   >
-                    <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform", feature.color)}>
-                      <feature.icon className="w-6 h-6" />
+                    <div className="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors" />
+                    
+                    <div className="relative w-16 h-16 flex items-center justify-center mb-8">
+                      <div className="absolute inset-0 bg-primary/10 rounded-2xl group-hover:rounded-3xl transition-all duration-500" />
+                      <feature.icon className="w-8 h-8 text-primary relative z-10" />
                     </div>
-                    <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{feature.desc}</p>
+                    <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">{feature.title}</h3>
+                    <p className="text-muted-foreground text-base leading-relaxed">{feature.desc}</p>
+                    <div className="mt-6 flex items-center gap-2 text-primary font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                      Explore Feature <ChevronRight className="w-4 h-4" />
+                    </div>
                   </button>
                 ))}
               </div>
 
-              <div className="bg-muted/30 border rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-8">
-                <div className="flex-1 space-y-4">
-                  <h2 className="text-2xl md:text-3xl font-display font-bold">Ready to excel in your engineering journey?</h2>
-                  <p className="text-muted-foreground">Join thousands of students using AI Campus Copilot to stay ahead in their academics and career.</p>
+              <div className="bg-primary/5 border-2 border-primary/10 rounded-3xl p-8 md:p-16 flex flex-col md:flex-row items-center gap-12 relative overflow-hidden">
+                <div className="absolute top-0 left-0 -ml-12 -mt-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 right-0 -mr-12 -mb-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl" />
+                
+                <div className="flex-1 space-y-6 relative z-10">
+                  <h2 className="text-3xl md:text-5xl font-display font-bold leading-tight">Ready to excel in your engineering journey?</h2>
+                  <p className="text-lg text-muted-foreground">Join thousands of students using AI Campus Copilot to stay ahead in their academics and career.</p>
                   <button 
                     onClick={() => setActiveTab('study')}
-                    className="bg-primary text-primary-foreground px-6 py-3 rounded-full font-medium hover:opacity-90 transition-opacity"
+                    className="bg-primary text-primary-foreground px-10 py-4 rounded-full font-bold text-lg hover:opacity-90 transition-all shadow-xl shadow-primary/20"
                   >
                     Get Started Now
                   </button>
                 </div>
-                <div className="flex-1 grid grid-cols-2 gap-4">
-                   <div className="p-4 bg-card border rounded-2xl text-center space-y-1">
-                     <div className="text-2xl font-bold text-primary">24/7</div>
-                     <div className="text-xs text-muted-foreground uppercase tracking-wider">Availability</div>
+                <div className="flex-1 grid grid-cols-2 gap-6 relative z-10">
+                   <div className="p-6 bg-card border-2 border-primary/5 rounded-3xl text-center space-y-2 shadow-sm">
+                     <div className="text-3xl font-bold text-primary">24/7</div>
+                     <div className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Availability</div>
                    </div>
-                   <div className="p-4 bg-card border rounded-2xl text-center space-y-1">
-                     <div className="text-2xl font-bold text-primary">12+</div>
-                     <div className="text-xs text-muted-foreground uppercase tracking-wider">Domains</div>
+                   <div className="p-6 bg-card border-2 border-primary/5 rounded-3xl text-center space-y-2 shadow-sm">
+                     <div className="text-3xl font-bold text-primary">12+</div>
+                     <div className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Domains</div>
                    </div>
-                   <div className="p-4 bg-card border rounded-2xl text-center space-y-1">
-                     <div className="text-2xl font-bold text-primary">100%</div>
-                     <div className="text-xs text-muted-foreground uppercase tracking-wider">AI Powered</div>
+                   <div className="p-6 bg-card border-2 border-primary/5 rounded-3xl text-center space-y-2 shadow-sm">
+                     <div className="text-3xl font-bold text-primary">100%</div>
+                     <div className="text-xs text-muted-foreground uppercase tracking-widest font-bold">AI Powered</div>
                    </div>
-                   <div className="p-4 bg-card border rounded-2xl text-center space-y-1">
-                     <div className="text-2xl font-bold text-primary">Free</div>
-                     <div className="text-xs text-muted-foreground uppercase tracking-wider">For Students</div>
+                   <div className="p-6 bg-card border-2 border-primary/5 rounded-3xl text-center space-y-2 shadow-sm">
+                     <div className="text-3xl font-bold text-primary">Free</div>
+                     <div className="text-xs text-muted-foreground uppercase tracking-widest font-bold">For Students</div>
                    </div>
                 </div>
               </div>
